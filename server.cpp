@@ -99,21 +99,27 @@ public:
     if (!err) {
          cout << "nome: " << file_name+""+make_daytime_string() << endl;
          cout << "conteudo: "<< data << endl;
-         //cria arquivo com  os dados recebidos
-         std::ofstream myfile;
-         myfile.open (file_name+""+make_daytime_string().c_str());
-         myfile << data;
-         myfile.close();
+         cout << "tamanho: "<< (unsigned)strlen(data) << endl;
 
+         //verifica o tamanho do dado em relação a configuração
+         if((unsigned)strlen(data) > file_size){
+           cout << "Arquivo muito grande!";
+         }else{
+           //cria arquivo com  os dados recebidos
+           std::ofstream myfile;
+           myfile.open (file_name+""+make_daytime_string().c_str());
+           myfile << data;
+           myfile.close();
+         }
 
          //verifica se o arquivo tem o tamanho configurado
-         std::ifstream myfile_done (file_name+""+make_daytime_string().c_str(), std::ios::binary);
-         std::streampos begin,end;
-         begin = myfile_done.tellg();
-         myfile_done.seekg (0, std::ios::end);
-         end = myfile_done.tellg();
-         myfile_done.close();
-         cout << "size is: " << (end-begin) << " bytes.\n";
+         // std::ifstream myfile_done (file_name+""+make_daytime_string().c_str(), std::ios::binary);
+         // std::streampos begin,end;
+         // begin = myfile_done.tellg();
+         // myfile_done.seekg (0, std::ios::end);
+         // end = myfile_done.tellg();
+         // myfile_done.close();
+         // cout << "size is: " << (end-begin) << " bytes.\n";
 
 
     } else {
