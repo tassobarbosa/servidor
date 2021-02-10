@@ -8,11 +8,17 @@ g++ server.cpp -o server -lboost_system -std=c++11
 
 ### Os testes realizados foram feitos seguindo o seguinte exemplo:
 *Cliente
+
  netcat 127.0.0.1 3337
+
  Hello world!
+
  Olá meu nome é Tasso Barbosa
+
  teste
+
  teste curto
+
  1 2 3
 
 ### Para a conclusão do projeto foram utilizadas as seguintes bibliotecas:
