@@ -14,8 +14,10 @@ using std::endl;
 
 //porta default, pode ser configurada no config.txt
 unsigned short int porta = 1234;
+int tamanho;
 struct Config {
     int	porta;
+    int tamanho;
 };
 void loadConfig(Config& config) {
     std::ifstream fin("config.txt");
@@ -24,6 +26,8 @@ void loadConfig(Config& config) {
         std::istringstream sin(line.substr(line.find("=") + 1));
         if (line.find("porta") != -1)
             sin >> config.porta;
+        else if (line.find("tamanho") != -1)
+            sin >> config.tamanho;
     }
 }
 
@@ -126,7 +130,9 @@ int main(int argc, char *argv[])
   Config config;
   loadConfig(config);
   porta = config.porta;
+  tamanho = config.tamanho;
   std::cout << porta << '\n';
+  std::cout << tamanho << '\n';
   try
     {
     boost::asio::io_service io_service;
