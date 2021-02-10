@@ -1,12 +1,12 @@
-#Todo código fonte está disponível no arquivo server.cpp
+# Todo código fonte está disponível no arquivo server.cpp
 
-##Para compilação do projeto demanda a realização da seguinte linha de comando:
+## Para compilação do projeto demanda a realização da seguinte linha de comando:
 g++ server.cpp -o server -lboost_system -std=c++11
 
-##Após, basta rodas o servidor:
+## Após, basta rodas o servidor:
 ./server
 
-##Os testes realizados foram feitos seguindo o seguinte exemplo:
+## Os testes realizados foram feitos seguindo o seguinte exemplo:
 *Cliente
  netcat 127.0.0.1 3337
  <frases aleatorias> Hello world!
