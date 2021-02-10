@@ -16,7 +16,7 @@ using std::cout;
 using std::endl;
 
 //save_path default, pode ser configurada no config.txt
-unsigned short int save_path = 1234;
+unsigned short int save_path;
 int file_size;
 std::string file_name;
 
@@ -97,14 +97,23 @@ public:
   void handle_read(const boost::system::error_code& err, size_t bytes_transferred)
   {
     if (!err) {
-
+         cout << "nome: " << file_name+""+make_daytime_string() << endl;
          cout << "conteudo: "<< data << endl;
-         cout << "data: " << file_name+""+make_daytime_string() << endl;
          //cria arquivo com  os dados recebidos
          std::ofstream myfile;
          myfile.open (file_name+""+make_daytime_string().c_str());
          myfile << data;
          myfile.close();
+
+
+         //verifica se o arquivo tem o tamanho configurado
+         std::ifstream myfile_done (file_name+""+make_daytime_string().c_str(), std::ios::binary);
+         std::streampos begin,end;
+         begin = myfile_done.tellg();
+         myfile_done.seekg (0, std::ios::end);
+         end = myfile_done.tellg();
+         myfile_done.close();
+         cout << "size is: " << (end-begin) << " bytes.\n";
 
 
     } else {
