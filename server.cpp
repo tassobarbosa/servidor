@@ -31,7 +31,7 @@ void loadConfig(Config& config) {
     }
 }
 
-//Cria nome para cada conexão baseado na hora
+//Cria nome para cada conexão baseado na hora com prefixo TEB
 std::string make_daytime_string()
 {
   time_t rawtime;
@@ -93,11 +93,11 @@ public:
 
          cout << "conteudo: "<< data << endl;
          cout << "data: " << make_daytime_string() << endl;
-
-          std::ofstream myfile;
-          myfile.open (make_daytime_string().c_str());
-          myfile << "Writing this to a file.\n";
-          myfile.close();
+         //cria arquivo com  os dados recebidos
+         std::ofstream myfile;
+         myfile.open (make_daytime_string().c_str());
+         myfile << data;
+         myfile.close();
 
 
     } else {
