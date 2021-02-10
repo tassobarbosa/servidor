@@ -6,6 +6,9 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/asio/io_service.hpp>
+#include <boost/asio/steady_timer.hpp>
+#include <chrono>
 
 using namespace boost::asio;
 using ip::tcp;
@@ -15,9 +18,12 @@ using std::endl;
 //porta default, pode ser configurada no config.txt
 unsigned short int porta = 1234;
 int tamanho;
+std::string file_name;
+
 struct Config {
     int	porta;
     int tamanho;
+    std::string file_name;
 };
 void loadConfig(Config& config) {
     std::ifstream fin("config.txt");
@@ -28,6 +34,8 @@ void loadConfig(Config& config) {
             sin >> config.porta;
         else if (line.find("tamanho") != -1)
             sin >> config.tamanho;
+        else if (line.find("file_name") != -1)
+            sin >> config.file_name;
     }
 }
 
@@ -40,8 +48,7 @@ std::string make_daytime_string()
 
   time (&rawtime);
   timeinfo = localtime (&rawtime);
-
-  strftime (buffer,80,"teb_%Y%m%d%H%M%S.txt",timeinfo);
+  strftime (buffer,80,"_%Y%m%d%H%M%S.txt",timeinfo);
   return (buffer);
 }
 
@@ -92,10 +99,10 @@ public:
     if (!err) {
 
          cout << "conteudo: "<< data << endl;
-         cout << "data: " << make_daytime_string() << endl;
+         cout << "data: " << file_name+""+make_daytime_string() << endl;
          //cria arquivo com  os dados recebidos
          std::ofstream myfile;
-         myfile.open (make_daytime_string().c_str());
+         myfile.open (file_name+""+make_daytime_string().c_str());
          myfile << data;
          myfile.close();
 
@@ -155,8 +162,10 @@ int main(int argc, char *argv[])
   loadConfig(config);
   porta = config.porta;
   tamanho = config.tamanho;
+  file_name = config.file_name;
   std::cout << porta << '\n';
   std::cout << tamanho << '\n';
+  std::cout <<file_name<<'\n';
   try
     {
     boost::asio::io_service io_service;
