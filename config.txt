@@ -1,3 +1,4 @@
-porta = 3337
-tamanho = 10
-file_name = tasso
+save_path = 3337
+file_size = 10
+file_name = teb
+timeout = 0

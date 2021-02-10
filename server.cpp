@@ -15,14 +15,14 @@ using ip::tcp;
 using std::cout;
 using std::endl;
 
-//porta default, pode ser configurada no config.txt
-unsigned short int porta = 1234;
-int tamanho;
+//save_path default, pode ser configurada no config.txt
+unsigned short int save_path = 1234;
+int file_size;
 std::string file_name;
 
 struct Config {
-    int	porta;
-    int tamanho;
+    int	save_path;
+    int file_size;
     std::string file_name;
 };
 void loadConfig(Config& config) {
@@ -30,10 +30,10 @@ void loadConfig(Config& config) {
     std::string line;
     while (getline(fin, line)) {
         std::istringstream sin(line.substr(line.find("=") + 1));
-        if (line.find("porta") != -1)
-            sin >> config.porta;
-        else if (line.find("tamanho") != -1)
-            sin >> config.tamanho;
+        if (line.find("save_path") != -1)
+            sin >> config.save_path;
+        else if (line.find("file_size") != -1)
+            sin >> config.file_size;
         else if (line.find("file_name") != -1)
             sin >> config.file_name;
     }
@@ -127,8 +127,8 @@ public:
 class tcp_server
 {
 public:
-//O construtor inicializa um acceptor para escutar na porta TCP.
-  tcp_server(boost::asio::io_service& io_service): acceptor_(io_service, tcp::endpoint(tcp::v4(), porta))
+//O construtor inicializa um acceptor para escutar na save_path TCP.
+  tcp_server(boost::asio::io_service& io_service): acceptor_(io_service, tcp::endpoint(tcp::v4(), save_path))
   {
      start_accept();
   }
@@ -160,11 +160,11 @@ int main(int argc, char *argv[])
   //carrega config.txt
   Config config;
   loadConfig(config);
-  porta = config.porta;
-  tamanho = config.tamanho;
+  save_path = config.save_path;
+  file_size = config.file_size;
   file_name = config.file_name;
-  std::cout << porta << '\n';
-  std::cout << tamanho << '\n';
+  std::cout << save_path << '\n';
+  std::cout << file_size << '\n';
   std::cout <<file_name<<'\n';
   try
     {
