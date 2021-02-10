@@ -15,7 +15,7 @@ using ip::tcp;
 using std::cout;
 using std::endl;
 
-//save_path default, pode ser configurada no config.txt
+//variaveis globais que receberão os dados do arquivo config
 unsigned short int save_path;
 int file_size;
 std::string file_name;
@@ -25,6 +25,8 @@ struct Config {
     int file_size;
     std::string file_name;
 };
+
+//carrega as definições do arquivo de configuração
 void loadConfig(Config& config) {
     std::ifstream fin("config.txt");
     std::string line;
@@ -39,7 +41,7 @@ void loadConfig(Config& config) {
     }
 }
 
-//Cria nome para cada conexão baseado na hora com prefixo TEB
+//Cria nome para cada conexão baseado na hora atual
 std::string make_daytime_string()
 {
   time_t rawtime;
@@ -59,7 +61,7 @@ class tcp_connection : public boost::enable_shared_from_this<tcp_connection>
 {
 private:
   tcp::socket sock;
-  std::string message="Hello From tcp_server!";
+  std::string message="Pronto para receber dados: ";
   enum { max_length = 1024 };
   char data[max_length];
 
@@ -97,29 +99,18 @@ public:
   void handle_read(const boost::system::error_code& err, size_t bytes_transferred)
   {
     if (!err) {
-         cout << "nome: " << file_name+""+make_daytime_string() << endl;
-         cout << "conteudo: "<< data << endl;
-         cout << "tamanho: "<< (unsigned)strlen(data) << endl;
-
-         //verifica o tamanho do dado em relação a configuração
+         //verifica o tamanho dos dados em relação à configuração
          if((unsigned)strlen(data) > file_size){
-           cout << "Arquivo muito grande!";
+           std::cout << "Arquivo muito grande! Não será criado!\n";
          }else{
+           std::cout << "Arquivo criado com sucesso!\n";
            //cria arquivo com  os dados recebidos
            std::ofstream myfile;
+           //Nome é dado de acordo com prefixo + _YYYYMMddHHmmss
            myfile.open (file_name+""+make_daytime_string().c_str());
            myfile << data;
            myfile.close();
          }
-
-         //verifica se o arquivo tem o tamanho configurado
-         // std::ifstream myfile_done (file_name+""+make_daytime_string().c_str(), std::ios::binary);
-         // std::streampos begin,end;
-         // begin = myfile_done.tellg();
-         // myfile_done.seekg (0, std::ios::end);
-         // end = myfile_done.tellg();
-         // myfile_done.close();
-         // cout << "size is: " << (end-begin) << " bytes.\n";
 
 
     } else {
@@ -130,7 +121,7 @@ public:
   void handle_write(const boost::system::error_code& err, size_t bytes_transferred)
   {
     if (!err) {
-       cout << "tcp_server sent Hello message!"<< endl;
+       cout << "Nova conexão iniciada!"<< endl;
     } else {
        std::cerr << "error: " << err.message() << endl;
        sock.close();
@@ -163,7 +154,7 @@ private:
     // socket
      tcp_connection::pointer connection = tcp_connection::create(acceptor_.get_io_service());
 
-    //accept operation assincrona e espera por nova conexao
+    //aceita conexão assincrona e espera por nova conexao
      acceptor_.async_accept(connection->socket(),
         boost::bind(&tcp_server::handle_accept, this, connection,
         boost::asio::placeholders::error));
@@ -172,15 +163,14 @@ private:
 
 int main(int argc, char *argv[])
 {
-  //carrega config.txt
+  cout<<"Servidor inicializado\n";
+  //carrega as variaveis de config.txt
   Config config;
   loadConfig(config);
   save_path = config.save_path;
   file_size = config.file_size;
   file_name = config.file_name;
-  std::cout << save_path << '\n';
-  std::cout << file_size << '\n';
-  std::cout <<file_name<<'\n';
+
   try
     {
     boost::asio::io_service io_service;
