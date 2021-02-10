@@ -31,7 +31,7 @@ void loadConfig(Config& config) {
     }
 }
 
-//Criar nome para cada conexão
+//Cria nome para cada conexão baseado na hora
 std::string make_daytime_string()
 {
   time_t rawtime;
@@ -41,10 +41,9 @@ std::string make_daytime_string()
   time (&rawtime);
   timeinfo = localtime (&rawtime);
 
-  strftime (buffer,80,"_%Y%m%d%H%M%S",timeinfo);
+  strftime (buffer,80,"teb_%Y%m%d%H%M%S.txt",timeinfo);
   return (buffer);
 }
-
 
 
 //Usaremos shared_ptr e enable_shared_from_this porque queremos manter o objeto
@@ -94,6 +93,12 @@ public:
 
          cout << "conteudo: "<< data << endl;
          cout << "data: " << make_daytime_string() << endl;
+
+          std::ofstream myfile;
+          myfile.open (make_daytime_string().c_str());
+          myfile << "Writing this to a file.\n";
+          myfile.close();
+
 
     } else {
          std::cerr << "error: " << err.message() << std::endl;
