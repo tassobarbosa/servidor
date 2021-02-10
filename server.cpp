@@ -31,6 +31,22 @@ void loadConfig(Config& config) {
     }
 }
 
+//Criar nome para cada conexão
+std::string make_daytime_string()
+{
+  time_t rawtime;
+  struct tm * timeinfo;
+  char buffer [80];
+
+  time (&rawtime);
+  timeinfo = localtime (&rawtime);
+
+  strftime (buffer,80,"_%Y%m%d%H%M%S",timeinfo);
+  return (buffer);
+}
+
+
+
 //Usaremos shared_ptr e enable_shared_from_this porque queremos manter o objeto
 //tcp_connection ativo enquanto houver uma operação que se refira a ele.
 class tcp_connection : public boost::enable_shared_from_this<tcp_connection>
@@ -75,7 +91,10 @@ public:
   void handle_read(const boost::system::error_code& err, size_t bytes_transferred)
   {
     if (!err) {
-         cout << data << endl;
+
+         cout << "conteudo: "<< data << endl;
+         cout << "data: " << make_daytime_string() << endl;
+
     } else {
          std::cerr << "error: " << err.message() << std::endl;
          sock.close();
@@ -96,7 +115,7 @@ public:
 class tcp_server
 {
 public:
-//O construtor inicializa um acceptor para escutar na porta TCP 1234.
+//O construtor inicializa um acceptor para escutar na porta TCP.
   tcp_server(boost::asio::io_service& io_service): acceptor_(io_service, tcp::endpoint(tcp::v4(), porta))
   {
      start_accept();
