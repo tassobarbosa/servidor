@@ -9,11 +9,11 @@ g++ server.cpp -o server -lboost_system -std=c++11
 ### Os testes realizados foram feitos seguindo o seguinte exemplo:
 *Cliente
  netcat 127.0.0.1 3337
- <frases aleatorias> Hello world!
- <frases aleatorias> Olá meu nome é Tasso Barbosa
- <frases aleatorias> teste
- <frases aleatorias> teste curto
- <frases aleatorias> 1 2 3
+ Hello world!
+ Olá meu nome é Tasso Barbosa
+ teste
+ teste curto
+ 1 2 3
 
 ### Para a conclusão do projeto foram utilizadas as seguintes bibliotecas:
  *BOOST: Esta biblioteca foi responsável por todo o protótipo do Servidor, bem como toda a sua comunicação assíncrona e gerenciamento de múltiplas sessões. Assim como foi pedido consegui através dela utilizar o protocolo TCP e tornar o projeto robusto. Vale ressaltar que o módulo ASIO foi o mais requisitado de toda biblioteca.
